@@ -1,0 +1,114 @@
+@import 'tailwindcss';
+
+/*
+  Colour roles. Every colour in the app comes from one of these variables, so
+  light and dark mode are swapped in one place.
+
+  plain  = plaintext (blue)     cipher = ciphertext (orange)     key = key (green)
+  The three were checked for colour-blind separation in both modes.
+*/
+:root {
+  color-scheme: light;
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --sunken: #f1f0ec;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --muted: #74726c;
+  --line: #e1e0d9;
+  --line-strong: #c3c2b7;
+  --plain: #2a78d6;
+  --cipher: #eb6834;
+  --key: #1baf7a;
+  --danger: #d03b3b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --sunken: #131312;
+    --ink: #ffffff;
+    --ink-2: #c3c2b7;
+    --muted: #96948d;
+    --line: #2c2c2a;
+    --line-strong: #454541;
+    --plain: #3987e5;
+    --cipher: #d95926;
+    --key: #199e70;
+    --danger: #e66767;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --page: #0d0d0d;
+  --surface: #1a1a19;
+  --sunken: #131312;
+  --ink: #ffffff;
+  --ink-2: #c3c2b7;
+  --muted: #96948d;
+  --line: #2c2c2a;
+  --line-strong: #454541;
+  --plain: #3987e5;
+  --cipher: #d95926;
+  --key: #199e70;
+  --danger: #e66767;
+}
+
+/* Makes the variables above available as Tailwind classes: bg-surface, text-ink-2, border-line ... */
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-sunken: var(--sunken);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-plain: var(--plain);
+  --color-cipher: var(--cipher);
+  --color-key: var(--key);
+  --color-danger: var(--danger);
+  --color-plain-soft: color-mix(in srgb, var(--plain) 16%, var(--surface));
+  --color-cipher-soft: color-mix(in srgb, var(--cipher) 16%, var(--surface));
+  --color-key-soft: color-mix(in srgb, var(--key) 16%, var(--surface));
+  --font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+
+:focus-visible {
+  outline: 2px solid var(--plain);
+  outline-offset: 2px;
+}
+
+/* Thin scrollbars for the wide letter strips. */
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
