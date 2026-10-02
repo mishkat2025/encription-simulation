@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { code, LANGUAGES, parseCode, type Language } from './code';
+import { algorithms } from './index';
 import { binarySearch, linearSearch } from './searching';
 import { bubbleSort, insertionSort, mergeSort, quickSort, selectionSort, sorts } from './sorting';
 
@@ -105,5 +107,23 @@ describe('binary search', () => {
   it('reports a missing value', () => {
     const steps = binarySearch.run(sorted, 14);
     expect(steps[steps.length - 1].found).toBeUndefined();
+  });
+});
+
+describe.each(algorithms.map((algorithm) => [algorithm.name, algorithm] as const))('%s code', (_name, algorithm) => {
+  // Every pseudocode line that a step can point at, for a few different inputs.
+  const usedLines = new Set(
+    [[5, 3, 8, 1, 9, 2, 7], [1, 2, 3, 4], [4, 3, 2, 1]].flatMap((values) =>
+      algorithm.run(algorithm.needsSorted ? ascending(values) : values, 3).map((step) => step.line),
+    ),
+  );
+
+  it.each(LANGUAGES.filter((language) => language.id !== 'pseudocode'))('has $label code that marks every step', ({ id }) => {
+    const lines = parseCode(code[algorithm.id][id as Exclude<Language, 'pseudocode'>]);
+    const marked = new Set(lines.flatMap((line) => (line.step === undefined ? [] : [line.step])));
+    for (const step of marked) expect(step).toBeLessThan(algorithm.pseudocode.length);
+    for (const line of usedLines) expect(marked, `pseudocode line ${line}`).toContain(line);
+    // The markers are stripped from the text the visitor sees.
+    expect(lines.some((line) => line.text.includes('@@'))).toBe(false);
   });
 });

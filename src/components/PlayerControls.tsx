@@ -50,7 +50,7 @@ export function PlayerControls({ player }: { player: Player }) {
         <select
           value={player.speed}
           onChange={(event) => player.setSpeed(Number(event.target.value))}
-          className="h-9 rounded-lg border border-line-strong bg-surface px-2 text-sm text-ink"
+          className="h-9 rounded-lg border border-line-strong bg-sunken px-2 text-sm text-ink"
         >
           {SPEEDS.map((speed) => (
             <option key={speed} value={speed}>

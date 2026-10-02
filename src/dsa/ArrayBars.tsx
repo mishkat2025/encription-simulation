@@ -5,7 +5,31 @@ import { motion } from 'motion/react';
 import { cx } from '../components/ui';
 import type { ArrayStep } from './types';
 
-const PLOT_HEIGHT = 170;
+const PLOT_HEIGHT = 180;
+
+export type BarState = 'found' | 'moved' | 'compare' | 'sorted' | 'idle';
+
+/** What is happening to one position in this step. The most specific state wins. */
+export function barState(step: ArrayStep, position: number): BarState {
+  if (step.found === position) return 'found';
+  if (step.moved.includes(position)) return 'moved';
+  if (step.compare.includes(position)) return 'compare';
+  if (step.sorted.includes(position)) return 'sorted';
+  return 'idle';
+}
+
+// Written out in full so Tailwind can see the class names.
+const fillClass: Record<BarState, string> = {
+  found: 'bg-done',
+  moved: 'bg-swap',
+  compare: 'bg-compare',
+  sorted: 'bg-done',
+  idle: 'bg-bar',
+};
+
+/** Whether a position is outside the part of the array being worked on. */
+export const isDimmed = (step: ArrayStep, position: number) =>
+  !!step.range && (position < step.range[0] || position > step.range[1]) && !step.sorted.includes(position);
 
 export function ArrayBars({ step, max }: { step: ArrayStep; max: number }) {
   const { array, ids } = step;
@@ -16,26 +40,12 @@ export function ArrayBars({ step, max }: { step: ArrayStep; max: number }) {
   }
 
   return (
-    <div className="scroll-thin overflow-x-auto pb-1">
-      <div className="mx-auto flex w-max items-end gap-1.5" style={{ minHeight: PLOT_HEIGHT + 64 }}>
+    <div className="scroll-thin overflow-x-auto rounded-xl border border-line bg-sunken px-3 pt-4 pb-2 sm:px-5">
+      <div className="flex items-end justify-center-safe gap-1.5">
         {array.map((value, position) => {
-          const inRange = !step.range || (position >= step.range[0] && position <= step.range[1]);
-          const isFound = step.found === position;
-          const isSorted = step.sorted.includes(position);
-          const isMoved = step.moved.includes(position);
-          const isCompared = step.compare.includes(position);
+          const state = barState(step, position);
           const isPivot = step.pivot === position;
-
-          // The most specific state wins.
-          const fill = isFound
-            ? 'bg-key'
-            : isMoved
-              ? 'bg-cipher'
-              : isCompared
-                ? 'bg-plain'
-                : isSorted
-                  ? 'bg-key'
-                  : 'bg-line-strong';
+          const active = state === 'compare' || state === 'moved' || state === 'found';
 
           return (
             // layout + a stable key make a bar slide to its new place when the value moves.
@@ -43,18 +53,38 @@ export function ArrayBars({ step, max }: { step: ArrayStep; max: number }) {
               key={ids[position]}
               layout
               transition={{ type: 'spring', stiffness: 380, damping: 32 }}
-              className={cx('flex w-8 flex-col items-center sm:w-9', !inRange && !isSorted && 'opacity-35')}
+              className={cx(
+                'flex max-w-12 min-w-7 flex-1 flex-col items-center transition-opacity duration-200 sm:min-w-8',
+                isDimmed(step, position) && 'opacity-30',
+              )}
             >
-              <span className="mb-1 font-mono text-xs text-ink tabular-nums">{value}</span>
-              <div
-                className={cx('w-full rounded-t-[4px] transition-colors duration-200', fill, isPivot && 'ring-2 ring-accent ring-offset-2 ring-offset-surface')}
-                style={{ height: Math.max(6, (value / max) * PLOT_HEIGHT) }}
-              />
-              <span className="mt-1 font-mono text-[10px] text-muted tabular-nums">{position}</span>
-              <span className="flex h-8 flex-col items-center font-mono text-[10px] leading-4 font-semibold text-ink">
-                {isPivot && <span>pivot</span>}
+              <div className="flex w-full flex-col items-center justify-end" style={{ height: PLOT_HEIGHT + 22 }}>
+                <span
+                  className={cx(
+                    'mb-1 font-mono text-xs tabular-nums transition-colors',
+                    active ? 'font-bold text-ink' : 'text-ink-2',
+                  )}
+                >
+                  {value}
+                </span>
+                <div
+                  className={cx(
+                    'w-full rounded-t-md transition-colors duration-200',
+                    fillClass[state],
+                    isPivot && 'outline-2 outline-offset-2 outline-accent-ink',
+                  )}
+                  style={{ height: Math.max(6, (value / max) * PLOT_HEIGHT) }}
+                />
+              </div>
+              <span className="mt-1.5 w-full border-t border-line-strong pt-1 text-center font-mono text-[10px] text-muted tabular-nums">
+                {position}
+              </span>
+              {/* Pointer names (i, j, low, mid ...) sit under the position they point at. */}
+              <span className="flex min-h-10 flex-col items-center gap-0.5 pt-0.5">
+                {(isPivot || labels[position]) && <span className="text-[9px] leading-none text-accent-ink">▲</span>}
+                {isPivot && <Pointer>pivot</Pointer>}
                 {(labels[position] ?? []).map((name) => (
-                  <span key={name}>{name}</span>
+                  <Pointer key={name}>{name}</Pointer>
                 ))}
               </span>
             </motion.div>
@@ -62,5 +92,13 @@ export function ArrayBars({ step, max }: { step: ArrayStep; max: number }) {
         })}
       </div>
     </div>
+  );
+}
+
+function Pointer({ children }: { children: string }) {
+  return (
+    <span className="rounded bg-accent-soft px-1 font-mono text-[10px] leading-4 font-semibold whitespace-nowrap text-accent-ink">
+      {children}
+    </span>
   );
 }

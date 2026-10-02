@@ -54,7 +54,7 @@ export function AttackPanel({ cipher, currentCiphertext, onStepThrough }: Props)
           maxLength={600}
           spellCheck={false}
           aria-label="Ciphertext to attack"
-          className="w-full rounded-lg border border-line-strong bg-surface p-3 font-mono text-sm text-ink"
+          className="w-full rounded-lg border border-line-strong bg-sunken p-3 font-mono text-sm text-ink"
         />
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <Button onClick={() => setCiphertext(sample)}>Sample message</Button>

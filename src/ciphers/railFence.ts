@@ -67,6 +67,7 @@ export const railFence: Cipher = {
           : 'Fill the zigzag with the ciphertext, one rail at a time.',
       readCaption:
         mode === 'encrypt' ? 'Read the rails one after another, left to right.' : 'Read along the zigzag.',
+      rowLabels: Array.from({ length: rails }, (_, r) => `Rail ${r + 1}`),
     };
   },
 };

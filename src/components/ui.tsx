@@ -33,18 +33,40 @@ export const outputName = (mode: Mode) => (mode === 'encrypt' ? 'Ciphertext' : '
 /** Joins class names, skipping any that are false or undefined. */
 export const cx = (...classes: (string | false | undefined)[]) => classes.filter(Boolean).join(' ');
 
-export function Card({ title, action, children }: { title?: string; action?: ReactNode; children: ReactNode }) {
+export function Card({
+  title,
+  subtitle,
+  action,
+  bodyClassName,
+  children,
+}: {
+  title?: string;
+  /** One short line under the title. */
+  subtitle?: string;
+  action?: ReactNode;
+  /** Extra classes for the area under the title, for example to lay it out in columns. */
+  bodyClassName?: string;
+  children: ReactNode;
+}) {
   return (
-    <section className="min-w-0 rounded-xl border border-line bg-surface p-4 sm:p-5">
+    <section className="min-w-0 rounded-2xl border border-line bg-surface shadow-[0_1px_2px_rgb(0_0_0/0.08)]">
       {(title || action) && (
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-          {title && <h2 className="text-sm font-semibold text-ink">{title}</h2>}
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-line px-5 py-3.5 sm:px-6">
+          <div className="min-w-0">
+            {title && <h2 className="m-0 text-[15px] font-semibold tracking-tight text-ink">{title}</h2>}
+            {subtitle && <p className="m-0 mt-0.5 text-xs text-muted">{subtitle}</p>}
+          </div>
           {action}
         </div>
       )}
-      {children}
+      <div className={cx('p-5 sm:p-6', bodyClassName)}>{children}</div>
     </section>
   );
+}
+
+/** A small heading inside a card. */
+export function Label({ children }: { children: ReactNode }) {
+  return <h3 className="m-0 mb-2.5 text-[11px] font-semibold tracking-wider text-muted uppercase">{children}</h3>;
 }
 
 /** A letter (or pair of letters) in a coloured box. */
@@ -94,10 +116,10 @@ export function Button({
       aria-label={label}
       title={label}
       className={cx(
-        'inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border px-3 text-sm font-medium transition-colors disabled:opacity-40',
+        'inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border px-3 text-sm font-semibold transition-colors disabled:opacity-35',
         primary
-          ? 'border-accent bg-accent text-on-accent hover:opacity-85'
-          : 'border-line-strong bg-surface text-ink hover:bg-sunken',
+          ? 'border-accent bg-accent text-on-accent hover:brightness-110'
+          : 'border-line-strong bg-raised text-ink hover:border-muted hover:bg-sunken',
       )}
     >
       {children}
@@ -105,20 +127,45 @@ export function Button({
   );
 }
 
-/** The top of every topic page: tags, title and a short summary. */
-export function PageHeader({ tags, title, aka, summary }: { tags: string[]; title: string; aka?: string; summary: string }) {
+/** The top of every topic page: where it sits, title, summary and key facts. */
+export function PageHeader({
+  tags,
+  title,
+  aka,
+  summary,
+  stats,
+}: {
+  /** The area and group, shown as a breadcrumb trail. */
+  tags: string[];
+  title: string;
+  aka?: string;
+  summary: string;
+  /** Short facts shown as tiles under the summary, for example the running time. */
+  stats?: { label: string; value: string }[];
+}) {
   return (
-    <div>
-      <div className="flex flex-wrap items-center gap-2 text-xs text-ink-2">
-        {tags.map((tag) => (
-          <span key={tag} className="rounded-full border border-line-strong px-2.5 py-0.5">
-            {tag}
+    <div className="pb-1">
+      <p className="m-0 flex flex-wrap items-center gap-1.5 text-xs font-medium text-muted">
+        {tags.map((tag, i) => (
+          <span key={tag} className="flex items-center gap-1.5">
+            {i > 0 && <span aria-hidden="true">/</span>}
+            <span className={i === tags.length - 1 ? 'text-accent-ink' : undefined}>{tag}</span>
           </span>
         ))}
-      </div>
-      <h1 className="mt-3 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">{title}</h1>
-      {aka && <p className="mt-1 text-sm text-ink-2">Also called: {aka}</p>}
-      <p className="mt-3 max-w-3xl leading-relaxed text-ink-2">{summary}</p>
+      </p>
+      <h1 className="mt-2 mb-0 text-3xl font-bold tracking-tight text-ink sm:text-[2.1rem]">{title}</h1>
+      {aka && <p className="mt-1.5 mb-0 text-sm text-muted">Also called: {aka}</p>}
+      <p className="mt-3 mb-0 max-w-3xl text-[15px] leading-relaxed text-ink-2">{summary}</p>
+      {stats && (
+        <dl className="m-0 mt-5 flex flex-wrap gap-2.5">
+          {stats.map((stat) => (
+            <div key={stat.label} className="min-w-28 rounded-xl border border-line bg-surface px-3.5 py-2.5">
+              <dt className="text-[11px] font-semibold tracking-wider text-muted uppercase">{stat.label}</dt>
+              <dd className="m-0 mt-0.5 font-mono text-[15px] font-semibold text-ink">{stat.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
     </div>
   );
 }
@@ -133,7 +180,7 @@ export function Tabs<T extends string>({
   onChange: (id: T) => void;
 }) {
   return (
-    <div className="flex gap-1 border-b border-line" role="tablist">
+    <div className="flex gap-6 border-b border-line" role="tablist">
       {tabs.map((tab) => (
         <button
           key={tab.id}
@@ -142,8 +189,8 @@ export function Tabs<T extends string>({
           aria-selected={current === tab.id}
           onClick={() => onChange(tab.id)}
           className={cx(
-            '-mb-px border-b-2 px-3 py-2 text-sm font-medium transition-colors',
-            current === tab.id ? 'border-accent text-ink' : 'border-transparent text-ink-2 hover:text-ink',
+            '-mb-px border-b-2 py-2.5 text-sm font-semibold transition-colors',
+            current === tab.id ? 'border-accent-ink text-ink' : 'border-transparent text-muted hover:text-ink',
           )}
         >
           {tab.label}
@@ -177,7 +224,7 @@ export function NumberField({
         type="number"
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-10 w-28 rounded-lg border border-line-strong bg-surface px-3 font-mono text-sm text-ink"
+        className="h-10 w-28 rounded-lg border border-line-strong bg-sunken px-3 font-mono text-sm text-ink"
       />
       {help && <span className="mt-1.5 block max-w-52 text-xs text-ink-2">{help}</span>}
     </label>
@@ -190,7 +237,7 @@ export function PresetButton({ children, onClick }: { children: ReactNode; onCli
     <button
       type="button"
       onClick={onClick}
-      className="rounded-full border border-line-strong px-3 py-1 text-left text-xs text-ink transition-colors hover:bg-sunken"
+      className="rounded-full border border-line-strong bg-raised px-3 py-1.5 text-left text-xs font-medium text-ink-2 transition-colors hover:border-accent-ink hover:text-ink"
     >
       {children}
     </button>
@@ -199,7 +246,7 @@ export function PresetButton({ children, onClick }: { children: ReactNode; onCli
 
 export function ErrorNote({ children }: { children: ReactNode }) {
   return (
-    <p role="alert" className="mt-3 rounded-lg border border-danger px-3 py-2 text-sm text-ink">
+    <p role="alert" className="mt-3 mb-0 rounded-lg border border-danger/60 bg-danger/10 px-3 py-2 text-sm text-ink">
       {children}
     </p>
   );

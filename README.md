@@ -25,11 +25,11 @@ Attacks:
 - **Factoring** a small RSA modulus by trial division to rebuild the private key.
 - **Discrete logarithm by trial** on a small Diffie-Hellman exchange to recover the shared key.
 
-The sorting and searching pages draw the array as bars that slide as values move, with the matching line of pseudocode highlighted and running counts of comparisons and moves.
+The sorting and searching pages draw the array as bars that slide as values move, with running counts of comparisons and moves. Beside the bars, the code is shown as pseudocode or as real Python, Java, C++ or C, and the lines for the current step are highlighted in whichever language is picked. Heap sort also draws the array as the binary tree it stands for.
 
 The modern cryptography topics show their working: the extended Euclidean algorithm and square-and-multiply for RSA and Diffie-Hellman, and for SHA-256 the padding, all 64 rounds, and the avalanche effect between two messages. SHA-256 is implemented from scratch and checked against the official test vectors.
 
-Other features: play, pause and step controls, keyboard shortcuts (arrow keys and space), the lecture's worked examples as one-click presets, light and dark themes, and a layout that works on phones.
+Other features: play, pause and step controls, keyboard shortcuts (arrow keys and space), the lecture's worked examples as one-click presets, a dark theme (default) and a light theme, and a layout that works on phones.
 
 ## Run it locally
 
@@ -65,7 +65,7 @@ src/
     ciphers.test.ts Tests against the lecture examples
   attacks/
     attacks.ts      Brute force, letter counting, English scoring
-  dsa/              Sorting and searching: the algorithms, their page and the bar view
+  dsa/              Sorting and searching: the algorithms, their code in four languages, their page, the bar and heap-tree views
   topics.tsx        The one list of every topic, used by the sidebar and the address bar
   labs/             Cryptography topics with their own page layout
     numberTheory.ts Primes, modular inverse, fast powers, RSA and Diffie-Hellman

@@ -175,7 +175,7 @@ export function DiffieHellmanLab() {
   return (
     <>
       <PageHeader
-        tags={['Public-key cryptography', 'Key exchange']}
+        tags={['Cryptography', 'Public-key cryptography', 'Key exchange']}
         title="Diffie-Hellman key exchange"
         summary="Alice and Bob end up with the same secret key even though everything they send each other can be read by an eavesdropper. The key itself never travels over the channel."
       />
@@ -189,9 +189,9 @@ export function DiffieHellmanLab() {
         onChange={setTab}
       />
 
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_21rem]">
+      <div className="grid grid-cols-1 gap-5">
         <Card title="Public numbers and private numbers">
-          <div className="flex flex-wrap items-start gap-4">
+          <div className="flex flex-wrap items-start gap-5">
             <NumberField label="Prime p" value={p} onChange={setP} tone="plain" />
             <NumberField label="Generator g" value={g} onChange={setG} tone="plain" />
             <NumberField label="Alice's private a" value={a} onChange={setA} />
@@ -225,9 +225,9 @@ export function DiffieHellmanLab() {
           </div>
         </Card>
 
-        <div className="order-last min-w-0 xl:order-none">
-          <Card title="How it works">
-            <dl className="mb-4 space-y-1.5 rounded-lg bg-sunken p-3 font-mono text-sm">
+        <div className="order-last min-w-0">
+          <Card title="How it works" bodyClassName="lg:flex lg:items-start lg:gap-10">
+            <dl className="mb-5 shrink-0 space-y-2 rounded-xl border border-line bg-sunken p-4 font-mono text-sm lg:mb-0 lg:w-96">
               <div className="flex gap-3">
                 <dt className="w-16 shrink-0 font-sans text-xs leading-5">Send</dt>
                 <dd className="m-0">A = gᵃ mod p, B = gᵇ mod p</dd>
@@ -237,7 +237,7 @@ export function DiffieHellmanLab() {
                 <dd className="m-0">K = Bᵃ mod p = Aᵇ mod p</dd>
               </div>
             </dl>
-            <ol className="list-decimal space-y-2 pl-5 text-sm leading-relaxed text-ink-2">
+            <ol className="m-0 max-w-3xl flex-1 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-ink-2 marker:font-semibold marker:text-accent-ink">
               <li>Raising g to a power mod p is fast. Going backwards, from the result to the power, is slow.</li>
               <li>Each side sends only its result, never its private number.</li>
               <li>Each side raises what it received to its own private number. Both arrive at g to the power a × b.</li>
@@ -249,7 +249,7 @@ export function DiffieHellmanLab() {
           </Card>
         </div>
 
-        <div className="min-w-0 xl:col-span-2">
+        <div className="min-w-0">
           {!exchange || !board ? (
             <Card>
               <p className="text-sm text-ink-2">Fix the values above to continue.</p>

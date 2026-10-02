@@ -330,6 +330,7 @@ export const heapSort: Algorithm = {
   id: 'heap-sort',
   name: 'Heap sort',
   group: 'Sorting',
+  showHeapTree: true,
   summary:
     'Arrange the array as a max-heap, where every parent is at least as large as its children. Then repeatedly move the largest value, at the front, to the end.',
   complexity: { best: 'O(n log n)', average: 'O(n log n)', worst: 'O(n log n)', space: 'O(1)' },

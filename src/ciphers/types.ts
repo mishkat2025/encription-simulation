@@ -98,6 +98,9 @@ export interface GridTrace {
   steps: GridStep[];
   writeCaption: string;
   readCaption: string;
+  /** Labels drawn above the columns (columnar: "1", "2" ...) or left of the rows (rail fence: "Rail 1" ...). */
+  columnLabels?: string[];
+  rowLabels?: string[];
 }
 
 /* ---------- permutation view: reorder the letters inside fixed-size blocks ---------- */

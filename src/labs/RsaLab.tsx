@@ -55,7 +55,7 @@ export function RsaLab() {
   return (
     <>
       <PageHeader
-        tags={['Public-key cryptography', 'Asymmetric']}
+        tags={['Cryptography', 'Public-key cryptography', 'Asymmetric']}
         title="RSA"
         summary="Bob publishes a key that anyone can use to encrypt, and keeps a second key that only he can decrypt with. The two keys are linked by two secret primes, and the security rests on how hard it is to factor their product."
       />
@@ -69,9 +69,9 @@ export function RsaLab() {
         onChange={setTab}
       />
 
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_21rem]">
+      <div className="grid grid-cols-1 gap-5">
         <Card title="Primes, exponent and message">
-          <div className="flex flex-wrap items-start gap-4">
+          <div className="flex flex-wrap items-start gap-5">
             <NumberField label="Prime p" value={p} onChange={setP} />
             <NumberField label="Prime q" value={q} onChange={setQ} />
             <NumberField
@@ -103,9 +103,9 @@ export function RsaLab() {
           </div>
         </Card>
 
-        <div className="order-last min-w-0 xl:order-none">
-          <Card title="How it works">
-            <dl className="mb-4 space-y-1.5 rounded-lg bg-sunken p-3 font-mono text-sm">
+        <div className="order-last min-w-0">
+          <Card title="How it works" bodyClassName="lg:flex lg:items-start lg:gap-10">
+            <dl className="mb-5 shrink-0 space-y-2 rounded-xl border border-line bg-sunken p-4 font-mono text-sm lg:mb-0 lg:w-96">
               <div className="flex gap-3">
                 <dt className="w-16 shrink-0 font-sans text-xs leading-5">Encrypt</dt>
                 <dd className="m-0">C = Mᵉ mod n</dd>
@@ -115,7 +115,7 @@ export function RsaLab() {
                 <dd className="m-0">M = Cᵈ mod n</dd>
               </div>
             </dl>
-            <ol className="list-decimal space-y-2 pl-5 text-sm leading-relaxed text-ink-2">
+            <ol className="m-0 max-w-3xl flex-1 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-ink-2 marker:font-semibold marker:text-accent-ink">
               <li>Bob picks two primes and multiplies them to get n. Multiplying is easy; undoing it is hard.</li>
               <li>He picks a public exponent e and computes the matching private exponent d.</li>
               <li>The public key is (e, n). Anyone can encrypt with it.</li>
@@ -124,7 +124,7 @@ export function RsaLab() {
           </Card>
         </div>
 
-        <div className="min-w-0 xl:col-span-2">
+        <div className="min-w-0">
           {!result ? (
             <Card>
               <p className="text-sm text-ink-2">Fix the values above to continue.</p>
@@ -140,7 +140,7 @@ export function RsaLab() {
                 </div>
               }
             >
-              <div className="sticky top-0 z-20 -mx-1 mb-4 border-b border-line bg-surface px-1 py-3">
+              <div className="sticky top-14 z-10 -mx-1 mb-4 border-b border-line bg-surface px-1 py-3">
                 <PlayerControls player={player} />
               </div>
               <StepTimeline steps={steps} step={player.step} />

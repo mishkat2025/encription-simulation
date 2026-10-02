@@ -51,6 +51,8 @@ export interface Algorithm {
   needsTarget?: boolean;
   /** Binary search only works on sorted input, so the page sorts the values first. */
   needsSorted?: boolean;
+  /** Heap sort also draws the array as the binary tree it stands for. */
+  showHeapTree?: boolean;
   run(values: number[], target?: number): ArrayStep[];
 }
 

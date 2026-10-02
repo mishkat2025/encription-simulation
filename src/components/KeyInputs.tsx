@@ -2,7 +2,7 @@ import type { KeyValues, ParamDef } from '../ciphers/types';
 import { ALPHABET } from '../ciphers/util';
 import { Button } from './ui';
 
-const field = 'h-10 rounded-lg border border-line-strong bg-surface px-3 font-mono text-sm text-ink';
+const field = 'h-10 rounded-lg border border-line-strong bg-sunken px-3 font-mono text-sm text-ink';
 
 /** A random arrangement of the alphabet, for the substitution cipher's key table. */
 function shuffledAlphabet(): string {

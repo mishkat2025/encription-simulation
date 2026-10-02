@@ -4,74 +4,63 @@
   Colour roles. Every colour in the app comes from one of these variables, so
   light and dark mode are swapped in one place.
 
-  The page colours come from one palette: ghost white #fafaff, lavender
-  #e4d9ff, indigo #273469, navy #1e2749 and gunmetal #30343f.
-  Light mode: lavender page, ghost-white cards, navy header.
-  Dark mode: gunmetal page, navy cards, indigo insets, lavender accents.
+  The look follows online-course sites such as Coursera: neutral charcoal
+  surfaces, one confident blue for actions and the current place, and plenty
+  of contrast for text. Dark is the default; light mode is one click away.
 
   plain  = plaintext (blue)     cipher = ciphertext (orange)     key = key (green)
-  The three were checked for colour-blind separation on both surfaces.
+  compare / swap / done / bar   = the states of a bar in the sorting views
 */
 :root {
-  color-scheme: light;
-  --page: #e4d9ff;
-  --surface: #fafaff;
-  --sunken: #efe9ff;
-  --ink: #1e2749;
-  --ink-2: #4a4e5c;
-  --muted: #5d6178;
-  --line: #d3c7f5;
-  --line-strong: #a898d8;
-  --accent: #273469;
-  --on-accent: #fafaff;
-  --header: #1e2749;
-  --on-header: #fafaff;
-  --plain: #2a78d6;
-  --cipher: #eb6834;
-  --key: #1baf7a;
-  --danger: #d03b3b;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    color-scheme: dark;
-    --page: #30343f;
-    --surface: #1e2749;
-    --sunken: #273469;
-    --ink: #fafaff;
-    --ink-2: #d5cdf0;
-    --muted: #a6abd0;
-    --line: #33427a;
-    --line-strong: #5564a6;
-    --accent: #e4d9ff;
-    --on-accent: #1e2749;
-    --header: #1e2749;
-    --on-header: #fafaff;
-    --plain: #3987e5;
-    --cipher: #d95926;
-    --key: #199e70;
-    --danger: #e66767;
-  }
-}
-
-:root[data-theme='dark'] {
   color-scheme: dark;
-  --page: #30343f;
-  --surface: #1e2749;
-  --sunken: #273469;
-  --ink: #fafaff;
-  --ink-2: #d5cdf0;
-  --muted: #a6abd0;
-  --line: #33427a;
-  --line-strong: #5564a6;
-  --accent: #e4d9ff;
-  --on-accent: #1e2749;
-  --header: #1e2749;
-  --on-header: #fafaff;
-  --plain: #3987e5;
-  --cipher: #d95926;
-  --key: #199e70;
-  --danger: #e66767;
+  --page: #0d0f12;
+  --surface: #15181d;
+  --sunken: #1c2026;
+  --raised: #20252c;
+  --ink: #eef0f3;
+  --ink-2: #b6bcc6;
+  --muted: #828a96;
+  --line: #262b33;
+  --line-strong: #39404b;
+  --accent: #2f6fe4;
+  --accent-ink: #7eb0ff;
+  --on-accent: #ffffff;
+  --header: #111317;
+  --on-header: #eef0f3;
+  --plain: #4c9dff;
+  --cipher: #f08a4b;
+  --key: #36c28a;
+  --danger: #f06a6a;
+  --compare: #f2bd4c;
+  --swap: #f0645a;
+  --done: #36c28a;
+  --bar: #4a5361;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --page: #f4f6f9;
+  --surface: #ffffff;
+  --sunken: #f1f4f8;
+  --raised: #ffffff;
+  --ink: #16191f;
+  --ink-2: #444c59;
+  --muted: #6b7380;
+  --line: #e2e6ec;
+  --line-strong: #c8cfd9;
+  --accent: #0056d2;
+  --accent-ink: #0050c4;
+  --on-accent: #ffffff;
+  --header: #ffffff;
+  --on-header: #16191f;
+  --plain: #1f6fd6;
+  --cipher: #d9581f;
+  --key: #158a5c;
+  --danger: #c93636;
+  --compare: #d99a0b;
+  --swap: #dc4a3f;
+  --done: #1e9e6a;
+  --bar: #b6bfcc;
 }
 
 /* Makes the variables above available as Tailwind classes: bg-surface, text-ink-2, border-line ... */
@@ -79,6 +68,7 @@
   --color-page: var(--page);
   --color-surface: var(--surface);
   --color-sunken: var(--sunken);
+  --color-raised: var(--raised);
   --color-ink: var(--ink);
   --color-ink-2: var(--ink-2);
   --color-muted: var(--muted);
@@ -87,16 +77,22 @@
   --color-header: var(--header);
   --color-on-header: var(--on-header);
   --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
   --color-on-accent: var(--on-accent);
+  --color-accent-soft: color-mix(in srgb, var(--accent) 16%, var(--surface));
   --color-plain: var(--plain);
   --color-cipher: var(--cipher);
   --color-key: var(--key);
   --color-danger: var(--danger);
-  --color-plain-soft: color-mix(in srgb, var(--plain) 16%, var(--surface));
-  --color-cipher-soft: color-mix(in srgb, var(--cipher) 16%, var(--surface));
-  --color-key-soft: color-mix(in srgb, var(--key) 16%, var(--surface));
-  --font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
+  --color-compare: var(--compare);
+  --color-swap: var(--swap);
+  --color-done: var(--done);
+  --color-bar: var(--bar);
+  --color-plain-soft: color-mix(in srgb, var(--plain) 18%, var(--surface));
+  --color-cipher-soft: color-mix(in srgb, var(--cipher) 18%, var(--surface));
+  --color-key-soft: color-mix(in srgb, var(--key) 18%, var(--surface));
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
 }
 
 body {
@@ -104,7 +100,15 @@ body {
   background: var(--page);
   color: var(--ink);
   font-family: var(--font-sans);
+  font-feature-settings: 'cv11', 'ss01';
   -webkit-font-smoothing: antialiased;
+}
+
+/* No ligatures in code: learners should see ">=" and "--" as typed, not as single symbols. */
+.font-mono,
+code,
+pre {
+  font-variant-ligatures: none;
 }
 
 button {
@@ -115,14 +119,61 @@ button:disabled {
 }
 
 :focus-visible {
-  outline: 2px solid var(--plain);
+  outline: 2px solid var(--accent-ink);
   outline-offset: 2px;
 }
 
-/* Thin scrollbars for the wide letter strips. */
+input,
+textarea,
+select {
+  transition: border-color 0.15s;
+}
+input:hover,
+textarea:hover,
+select:hover {
+  border-color: var(--muted);
+}
+
+/* Thin scrollbars for the wide letter strips and the code panel. */
 .scroll-thin {
   scrollbar-width: thin;
   scrollbar-color: var(--line-strong) transparent;
+}
+
+/* Syntax colours for the code panel. */
+.tok-keyword {
+  color: #c792ea;
+}
+.tok-type {
+  color: #82aaff;
+}
+.tok-number {
+  color: #f78c6c;
+}
+.tok-string {
+  color: #c3e88d;
+}
+.tok-comment {
+  color: var(--muted);
+  font-style: italic;
+}
+.tok-fn {
+  color: #ffcb6b;
+}
+:root[data-theme='light'] .tok-keyword {
+  color: #8839ef;
+}
+:root[data-theme='light'] .tok-type {
+  color: #1e66f5;
+}
+:root[data-theme='light'] .tok-number {
+  color: #d05d1a;
+}
+:root[data-theme='light'] .tok-string {
+  color: #3b8a1a;
+}
+:root[data-theme='light'] .tok-fn {
+  color: #a35c00;
 }
 
 @media (prefers-reduced-motion: reduce) {

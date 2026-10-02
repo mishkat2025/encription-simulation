@@ -44,12 +44,12 @@ export function HashLab() {
   return (
     <>
       <PageHeader
-        tags={['Hash functions', 'SHA-2 family']}
+        tags={['Cryptography', 'Hash functions', 'SHA-2 family']}
         title="SHA-256 hashing"
         summary="A hash function turns a message of any length into a fixed-size fingerprint. It has no key and cannot be run backwards. SHA-256 always gives 256 bits, shown here as 64 hex digits."
       />
 
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_21rem]">
+      <div className="grid grid-cols-1 gap-5">
         <Card title="Message and digest">
           <label className="block">
             <span className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-ink">
@@ -62,7 +62,7 @@ export function HashLab() {
               rows={2}
               maxLength={200}
               spellCheck={false}
-              className="w-full rounded-lg border border-line-strong bg-surface p-3 font-mono text-sm text-ink"
+              className="w-full rounded-lg border border-line-strong bg-sunken p-3 font-mono text-sm text-ink"
             />
           </label>
           <div className="mt-4 rounded-lg bg-sunken p-4">
@@ -81,9 +81,9 @@ export function HashLab() {
           </p>
         </Card>
 
-        <div className="order-last min-w-0 xl:order-none">
-          <Card title="How it works">
-            <ol className="list-decimal space-y-2 pl-5 text-sm leading-relaxed text-ink-2">
+        <div className="order-last min-w-0">
+          <Card title="How it works" bodyClassName="lg:flex lg:items-start lg:gap-10">
+            <ol className="m-0 max-w-3xl flex-1 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-ink-2 marker:font-semibold marker:text-accent-ink">
               <li>The same message always gives the same digest.</li>
               <li>Changing any part of the message changes about half of the digest's bits.</li>
               <li>From a digest, there is no practical way to find a message that produces it.</li>
@@ -96,7 +96,7 @@ export function HashLab() {
           </Card>
         </div>
 
-        <div className="min-w-0 space-y-4 xl:col-span-2">
+        <div className="min-w-0 space-y-4">
           <Card title="Avalanche effect: change one letter">
             <label className="block">
               <span className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-ink">
@@ -109,7 +109,7 @@ export function HashLab() {
                 onChange={(event) => setOther(event.target.value)}
                 maxLength={200}
                 spellCheck={false}
-                className="h-10 w-full rounded-lg border border-line-strong bg-surface px-3 font-mono text-sm text-ink"
+                className="h-10 w-full rounded-lg border border-line-strong bg-sunken px-3 font-mono text-sm text-ink"
               />
             </label>
 
@@ -129,7 +129,7 @@ export function HashLab() {
                 <p className="m-0 text-sm font-semibold text-ink">
                   {difference.count} of 256 bits differ ({Math.round((difference.count / 256) * 100)}%)
                 </p>
-                <div className="flex gap-4">
+                <div className="flex gap-5">
                   <LegendDot tone="cipher">Bit changed</LegendDot>
                   <span className="inline-flex items-center gap-1.5 text-xs text-ink-2">
                     <span className="h-2.5 w-2.5 rounded-sm border border-line-strong" />
@@ -228,7 +228,7 @@ function Rounds({ trace, step, controls }: { trace: Sha256Trace; step: number; c
 
         <div className="mt-5 rounded-lg bg-sunken p-4">
           {round ? (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-5">
               <div className="flex flex-wrap items-baseline gap-x-6 gap-y-1 text-sm">
                 <span className="font-semibold text-ink">
                   Block {blockIndex + 1}, round {roundIndex + 1} of 64

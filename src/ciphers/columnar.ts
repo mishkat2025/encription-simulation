@@ -71,7 +71,9 @@ export const columnar: Cipher = {
         mode === 'encrypt'
           ? 'Write the plaintext into the table, row by row.'
           : 'Fill the table with the ciphertext, column by column.',
-      readCaption: mode === 'encrypt' ? 'Read the table column by column.' : 'Read the table row by row.',
+      readCaption: mode === 'encrypt' ? 'Read the table column by column, top to bottom.' : 'Read the table row by row, left to right.',
+      columnLabels: Array.from({ length: Math.min(cols, Math.max(n, 1)) }, (_, c) => String(c + 1)),
+      rowLabels: Array.from({ length: rows }, (_, r) => `Row ${r + 1}`),
     };
   },
 };

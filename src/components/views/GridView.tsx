@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react';
 import type { GridTrace, Mode } from '../../ciphers/types';
 import { cx, inputTone, outputTone, ringTone, softTone } from '../ui';
 
-const CELL = 36;
+const CELL = 40;
 const GAP = 4;
 
 export function GridView({ trace, step, mode }: { trace: GridTrace; step: number; mode: Mode }) {
@@ -27,11 +27,15 @@ export function GridView({ trace, step, mode }: { trace: GridTrace; step: number
   useEffect(() => {
     const box = scroller.current;
     if (!box || currentColumn === undefined) return;
-    const x = currentColumn * (CELL + GAP);
+    const x = currentColumn * (CELL + GAP) + (trace.rowLabels ? 64 : 0);
     box.scrollTo({ left: x - box.clientWidth / 2 + CELL / 2, behavior: 'smooth' });
-  }, [currentColumn]);
+  }, [currentColumn, trace.rowLabels]);
 
   const phase = current?.phase ?? 'write';
+  const { columnLabels, rowLabels } = trace;
+  // The labels take the first row and column, so the letters move over by one.
+  const rowOffset = columnLabels ? 1 : 0;
+  const colOffset = rowLabels ? 1 : 0;
 
   return (
     <div className="space-y-4">
@@ -44,11 +48,38 @@ export function GridView({ trace, step, mode }: { trace: GridTrace; step: number
         <div
           className="mx-auto grid w-max font-mono"
           style={{
-            gridTemplateColumns: `repeat(${trace.cols}, ${CELL}px)`,
-            gridTemplateRows: `repeat(${trace.rows}, ${CELL}px)`,
+            gridTemplateColumns: `${rowLabels ? 'auto ' : ''}repeat(${trace.cols}, ${CELL}px)`,
+            gridTemplateRows: `${columnLabels ? '24px ' : ''}repeat(${trace.rows}, ${CELL}px)`,
             gap: GAP,
           }}
         >
+          {/* Column numbers above the table, and row or rail names on its left. The current ones light up. */}
+          {columnLabels?.map((label, c) => (
+            <div
+              key={`col-${c}`}
+              style={{ gridRow: 1, gridColumn: c + 1 + colOffset }}
+              className={cx(
+                'flex items-center justify-center rounded-md text-[11px] font-semibold tabular-nums transition-colors',
+                current?.c === c ? 'bg-accent text-on-accent' : 'text-muted',
+              )}
+            >
+              {label}
+            </div>
+          ))}
+          {rowLabels?.map((label, r) => (
+            <div
+              key={`row-${r}`}
+              style={{ gridRow: r + 1 + rowOffset, gridColumn: 1 }}
+              className={cx(
+                // Sticky, so the rail names stay in view while a long message scrolls sideways.
+                'sticky left-0 z-20 flex items-center justify-end rounded-md px-2 font-sans text-xs font-semibold whitespace-nowrap transition-colors',
+                current?.r === r ? 'bg-accent text-on-accent' : 'bg-surface text-muted',
+              )}
+            >
+              {label}
+            </div>
+          ))}
+
           {trace.slots.map(({ r, c }) => {
             const id = `${r},${c}`;
             const isCurrent = current?.r === r && current.c === c;
@@ -57,15 +88,15 @@ export function GridView({ trace, step, mode }: { trace: GridTrace; step: number
             return (
               <div
                 key={id}
-                style={{ gridRow: r + 1, gridColumn: c + 1 }}
+                style={{ gridRow: r + 1 + rowOffset, gridColumn: c + 1 + colOffset }}
                 className={cx(
-                  'flex items-center justify-center rounded-md border text-sm transition-all duration-200',
+                  'flex items-center justify-center rounded-lg border text-base transition-all duration-200',
                   readLetter !== undefined
                     ? cx(softTone[outTone], 'font-semibold text-ink')
                     : writtenLetter !== undefined
                       ? cx(softTone[inTone], 'font-semibold text-ink')
                       : 'border-dashed border-line-strong text-muted',
-                  isCurrent && cx('scale-110 ring-2', ringTone[phase === 'read' ? outTone : inTone]),
+                  isCurrent && cx('z-10 scale-110 ring-2', ringTone[phase === 'read' ? outTone : inTone]),
                 )}
               >
                 {readLetter ?? writtenLetter ?? ''}

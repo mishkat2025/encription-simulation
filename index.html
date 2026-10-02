@@ -5,12 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Step through cryptography one step at a time: classical ciphers, RSA, Diffie-Hellman and SHA-256, with the attacks that break the weak ones."
+      content="Step through computer science one step at a time: classical ciphers, RSA, Diffie-Hellman, SHA-256, and sorting and searching algorithms with code in C, C++, Python and Java."
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    />
     <title>CS² for Everyone: computer science concept simulations</title>
     <script>
-      // Apply the saved theme before the page paints, so there is no flash.
+      // Apply the saved theme before the page paints, so there is no flash. Dark is the default.
       try {
         var saved = localStorage.getItem('theme');
         if (saved === 'light' || saved === 'dark') document.documentElement.dataset.theme = saved;

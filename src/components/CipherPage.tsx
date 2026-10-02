@@ -10,7 +10,7 @@ import { GridView } from './views/GridView';
 import { PermutationView } from './views/PermutationView';
 import { PlayfairView } from './views/PlayfairView';
 import { StripView } from './views/StripView';
-import { Button, Card, ErrorNote, LegendDot, PageHeader, PresetButton, Tabs, cx, inputName, outputName } from './ui';
+import { Button, Card, ErrorNote, LegendDot, Label, PageHeader, PresetButton, Tabs, cx, inputName, outputName } from './ui';
 import type { Cipher, Example, KeyValues, Mode, Trace } from '../ciphers/types';
 import { KeyError } from '../ciphers/util';
 import { usePlayer, usePlayerKeys } from '../hooks/usePlayer';
@@ -55,7 +55,7 @@ export function CipherPage({ cipher }: { cipher: Cipher }) {
   return (
     <>
       <PageHeader
-        tags={cipher.category ? [cipher.group, cipher.category] : [cipher.group]}
+        tags={cipher.category ? ['Cryptography', cipher.group, cipher.category] : ['Cryptography', cipher.group]}
         title={cipher.name}
         aka={cipher.aka}
         summary={cipher.summary}
@@ -84,11 +84,11 @@ export function CipherPage({ cipher }: { cipher: Cipher }) {
           }}
         />
       ) : (
-        <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_21rem]">
+        <div className="grid grid-cols-1 gap-5">
           <Card
             title="Message and key"
             action={
-              <div className="flex rounded-lg border border-line-strong p-0.5" role="group" aria-label="Direction">
+              <div className="flex rounded-lg border border-line bg-sunken p-0.5" role="group" aria-label="Direction">
                 <ModeButton active={mode === 'encrypt'} onClick={() => setMode('encrypt')}>
                   Encrypt
                 </ModeButton>
@@ -98,34 +98,40 @@ export function CipherPage({ cipher }: { cipher: Cipher }) {
               </div>
             }
           >
-            <label className="block">
-              <span className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-ink">
-                <span className={cx('h-2.5 w-2.5 rounded-sm', mode === 'encrypt' ? 'bg-plain' : 'bg-cipher')} />
-                {inputName(mode)}
-              </span>
-              <textarea
-                value={text}
-                onChange={(event) => setText(event.target.value)}
-                rows={2}
-                maxLength={300}
-                spellCheck={false}
-                placeholder={mode === 'encrypt' ? 'Type a message to encrypt' : 'Paste ciphertext to decrypt'}
-                className="w-full rounded-lg border border-line-strong bg-surface p-3 font-mono text-sm text-ink"
-              />
-            </label>
-            <p className="mt-1 mb-4 text-xs text-ink-2">
-              Only the letters a to z are used. Spaces, digits and punctuation are dropped, as in the lecture.
-            </p>
+            <div className="grid gap-x-8 gap-y-5 lg:grid-cols-2">
+              <div>
+                <label className="block">
+                  <span className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-ink">
+                    <span className={cx('h-2.5 w-2.5 rounded-sm', mode === 'encrypt' ? 'bg-plain' : 'bg-cipher')} />
+                    {inputName(mode)}
+                  </span>
+                  <textarea
+                    value={text}
+                    onChange={(event) => setText(event.target.value)}
+                    rows={2}
+                    maxLength={300}
+                    spellCheck={false}
+                    placeholder={mode === 'encrypt' ? 'Type a message to encrypt' : 'Paste ciphertext to decrypt'}
+                    className="w-full rounded-lg border border-line-strong bg-sunken p-3 font-mono text-sm text-ink"
+                  />
+                </label>
+                <p className="mt-1 mb-0 text-xs text-muted">
+                  Only the letters a to z are used. Spaces, digits and punctuation are dropped, as in the lecture.
+                </p>
+              </div>
 
-            <KeyInputs
-              params={cipher.params}
-              values={keyValues}
-              onChange={(id, value) => setKeyValues({ ...keyValues, [id]: value })}
-            />
-            {error && <ErrorNote>{error}</ErrorNote>}
+              <div>
+                <KeyInputs
+                  params={cipher.params}
+                  values={keyValues}
+                  onChange={(id, value) => setKeyValues({ ...keyValues, [id]: value })}
+                />
+                {error && <ErrorNote>{error}</ErrorNote>}
+              </div>
+            </div>
 
-            <div className="mt-5 border-t border-line pt-4">
-              <p className="mb-2 text-xs font-medium text-ink-2">Examples from the lecture</p>
+            <div className="mt-6 border-t border-line pt-5">
+              <Label>Examples from the lecture</Label>
               <div className="flex flex-wrap gap-2">
                 {cipher.examples.map((example) => (
                   <PresetButton key={example.label} onClick={() => loadExample(example)}>
@@ -136,11 +142,11 @@ export function CipherPage({ cipher }: { cipher: Cipher }) {
             </div>
           </Card>
 
-          {/* On small screens this card moves to the bottom of the page. */}
-          <div className="order-last min-w-0 xl:order-none">
-            <Card title="How it works">
+          {/* order-last puts this card at the bottom of the page, after the steps. */}
+          <div className="order-last min-w-0">
+            <Card title="How it works" bodyClassName="lg:flex lg:items-start lg:gap-10">
               {cipher.formula && (
-                <dl className="mb-4 space-y-1.5 rounded-lg bg-sunken p-3 font-mono text-sm">
+                <dl className="mb-5 shrink-0 space-y-2 rounded-xl border border-line bg-sunken p-4 font-mono text-sm lg:mb-0 lg:w-96">
                   <div className={cx('flex gap-3', mode !== 'encrypt' && 'text-muted')}>
                     <dt className="w-16 shrink-0 font-sans text-xs leading-5">Encrypt</dt>
                     <dd className="m-0">{cipher.formula.encrypt}</dd>
@@ -151,7 +157,7 @@ export function CipherPage({ cipher }: { cipher: Cipher }) {
                   </div>
                 </dl>
               )}
-              <ol className="list-decimal space-y-2 pl-5 text-sm leading-relaxed text-ink-2">
+              <ol className="m-0 max-w-3xl flex-1 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-ink-2 marker:font-semibold marker:text-accent-ink">
                 {cipher.howItWorks.map((line) => (
                   <li key={line}>{line}</li>
                 ))}
@@ -159,7 +165,7 @@ export function CipherPage({ cipher }: { cipher: Cipher }) {
             </Card>
           </div>
 
-          <div className="min-w-0 space-y-4 xl:col-span-2">
+          <div className="min-w-0 space-y-5">
             <Card
               title="Step by step"
               action={
@@ -202,7 +208,7 @@ export function CipherPage({ cipher }: { cipher: Cipher }) {
                 </div>
               }
             >
-              <p className="min-h-6 font-mono text-lg break-all">
+              <p className="m-0 min-h-7 rounded-xl border border-line bg-sunken px-4 py-3 font-mono text-xl tracking-wider break-all">
                 <span className="font-semibold text-ink">{output.slice(0, revealed)}</span>
                 <span className="text-muted">{output.slice(revealed)}</span>
               </p>
@@ -226,8 +232,8 @@ function ModeButton({ active, onClick, children }: { active: boolean; onClick: (
       aria-pressed={active}
       onClick={onClick}
       className={cx(
-        'h-8 rounded-md px-3 text-sm font-medium transition-colors',
-        active ? 'bg-accent text-on-accent' : 'text-ink-2 hover:text-ink',
+        'h-8 rounded-md px-3.5 text-sm font-semibold transition-colors',
+        active ? 'bg-accent text-on-accent shadow-sm' : 'text-muted hover:text-ink',
       )}
     >
       {children}
