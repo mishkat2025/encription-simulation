@@ -1,31 +1,28 @@
-import { ciphers, groups } from '../ciphers';
-import { labs } from '../labs';
+import { topics, type Topic } from '../topics';
 import { cx } from './ui';
 
-/** Every topic in the app, grouped the way the sidebar shows them. */
-const sections = [
-  ...groups.map((group) => ({
+/** The topics of one area, grouped under their headings in the order they are listed. */
+function sectionsFor(area: Topic['area']) {
+  const inArea = topics.filter((topic) => topic.area === area);
+  return [...new Set(inArea.map((topic) => topic.group))].map((group) => ({
     title: group,
-    items: ciphers.filter((cipher) => cipher.group === group).map(({ id, name }) => ({ id, name })),
-  })),
-  ...[...new Set(labs.map((lab) => lab.group))].map((group) => ({
-    title: group,
-    items: labs.filter((lab) => lab.group === group).map(({ id, name }) => ({ id, name })),
-  })),
-];
+    items: inArea.filter((topic) => topic.group === group),
+  }));
+}
 
 /**
- * The list of topics. Each entry is a plain link to "#topic-id": the App
- * component listens for the address changing and shows that topic.
- * On small screens the list becomes a dropdown.
+ * The list of topics in the current area. Each entry is a plain link to
+ * "#topic-id": the App component listens for the address changing and shows
+ * that topic. On small screens the list becomes a dropdown.
  */
-export function Sidebar({ currentId }: { currentId: string }) {
+export function Sidebar({ current }: { current: Topic }) {
+  const sections = sectionsFor(current.area);
   return (
     <nav aria-label="Topics">
       <label className="block lg:hidden">
         <span className="mb-1.5 block text-xs font-medium text-ink-2">Topic</span>
         <select
-          value={currentId}
+          value={current.id}
           onChange={(event) => {
             window.location.hash = event.target.value;
           }}
@@ -52,10 +49,10 @@ export function Sidebar({ currentId }: { currentId: string }) {
                 <li key={item.id}>
                   <a
                     href={`#${item.id}`}
-                    aria-current={item.id === currentId ? 'page' : undefined}
+                    aria-current={item.id === current.id ? 'page' : undefined}
                     className={cx(
                       'block rounded-lg px-3 py-2 text-sm no-underline transition-colors',
-                      item.id === currentId ? 'bg-accent font-medium text-on-accent' : 'text-ink hover:bg-sunken',
+                      item.id === current.id ? 'bg-accent font-medium text-on-accent' : 'text-ink hover:bg-sunken',
                     )}
                   >
                     {item.name}

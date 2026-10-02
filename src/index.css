@@ -5,24 +5,27 @@
   light and dark mode are swapped in one place.
 
   The page colours come from one palette: ghost white #fafaff, lavender
-  #e4d9ff, indigo #273469, navy #1e2749 and gunmetal #30343f (the base of the
-  secondary text colour).
+  #e4d9ff, indigo #273469, navy #1e2749 and gunmetal #30343f.
+  Light mode: lavender page, ghost-white cards, navy header.
+  Dark mode: gunmetal page, navy cards, indigo insets, lavender accents.
 
   plain  = plaintext (blue)     cipher = ciphertext (orange)     key = key (green)
   The three were checked for colour-blind separation on both surfaces.
 */
 :root {
   color-scheme: light;
-  --page: #fafaff;
-  --surface: #ffffff;
-  --sunken: #f1edff;
+  --page: #e4d9ff;
+  --surface: #fafaff;
+  --sunken: #efe9ff;
   --ink: #1e2749;
-  --ink-2: #4f5466;
-  --muted: #646980;
-  --line: #e4d9ff;
-  --line-strong: #b3a6de;
+  --ink-2: #4a4e5c;
+  --muted: #5d6178;
+  --line: #d3c7f5;
+  --line-strong: #a898d8;
   --accent: #273469;
   --on-accent: #fafaff;
+  --header: #1e2749;
+  --on-header: #fafaff;
   --plain: #2a78d6;
   --cipher: #eb6834;
   --key: #1baf7a;
@@ -32,16 +35,18 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     color-scheme: dark;
-    --page: #1e2749;
-    --surface: #273469;
-    --sunken: #1e2749;
+    --page: #30343f;
+    --surface: #1e2749;
+    --sunken: #273469;
     --ink: #fafaff;
     --ink-2: #d5cdf0;
     --muted: #a6abd0;
-    --line: #3a4884;
+    --line: #33427a;
     --line-strong: #5564a6;
     --accent: #e4d9ff;
     --on-accent: #1e2749;
+    --header: #1e2749;
+    --on-header: #fafaff;
     --plain: #3987e5;
     --cipher: #d95926;
     --key: #199e70;
@@ -51,16 +56,18 @@
 
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --page: #1e2749;
-  --surface: #273469;
-  --sunken: #1e2749;
+  --page: #30343f;
+  --surface: #1e2749;
+  --sunken: #273469;
   --ink: #fafaff;
   --ink-2: #d5cdf0;
   --muted: #a6abd0;
-  --line: #3a4884;
+  --line: #33427a;
   --line-strong: #5564a6;
   --accent: #e4d9ff;
   --on-accent: #1e2749;
+  --header: #1e2749;
+  --on-header: #fafaff;
   --plain: #3987e5;
   --cipher: #d95926;
   --key: #199e70;
@@ -77,6 +84,8 @@
   --color-muted: var(--muted);
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
+  --color-header: var(--header);
+  --color-on-header: var(--on-header);
   --color-accent: var(--accent);
   --color-on-accent: var(--on-accent);
   --color-plain: var(--plain);

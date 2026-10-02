@@ -1,6 +1,6 @@
 # CS² for Everyone
 
-**C**omputer **S**cience **C**oncept **S**imulation for everyone: an interactive web app that shows how computer science concepts work, one step at a time. The first area is cryptography. Type a message, pick an algorithm and a key, and watch each step happen. Then switch sides and break it the way an attacker would.
+**C**omputer **S**cience **C**oncept **S**imulation for everyone: an interactive web app that shows how computer science concepts work, one step at a time. There are two areas so far: cryptography, and data structures and algorithms. Pick a topic, give it some input, and watch each step happen. In the cryptography area you can then switch sides and break it the way an attacker would.
 
 It runs entirely in the browser. There is no backend: every algorithm is plain TypeScript logic.
 
@@ -15,6 +15,8 @@ The classical ciphers follow a university lecture on traditional symmetric-key c
 | Transposition | Rail fence, columnar, keyed (permutation key) |
 | Public-key cryptography | RSA, Diffie-Hellman key exchange |
 | Hash functions | SHA-256 |
+| Searching | Linear search, binary search |
+| Sorting | Bubble, selection, insertion, merge, quick and heap sort |
 
 Attacks:
 
@@ -23,7 +25,9 @@ Attacks:
 - **Factoring** a small RSA modulus by trial division to rebuild the private key.
 - **Discrete logarithm by trial** on a small Diffie-Hellman exchange to recover the shared key.
 
-The modern algorithms show their working: the extended Euclidean algorithm and square-and-multiply for RSA and Diffie-Hellman, and for SHA-256 the padding, all 64 rounds, and the avalanche effect between two messages. SHA-256 is implemented from scratch and checked against the official test vectors.
+The sorting and searching pages draw the array as bars that slide as values move, with the matching line of pseudocode highlighted and running counts of comparisons and moves.
+
+The modern cryptography topics show their working: the extended Euclidean algorithm and square-and-multiply for RSA and Diffie-Hellman, and for SHA-256 the padding, all 64 rounds, and the avalanche effect between two messages. SHA-256 is implemented from scratch and checked against the official test vectors.
 
 Other features: play, pause and step controls, keyboard shortcuts (arrow keys and space), the lecture's worked examples as one-click presets, light and dark themes, and a layout that works on phones.
 
@@ -61,7 +65,9 @@ src/
     ciphers.test.ts Tests against the lecture examples
   attacks/
     attacks.ts      Brute force, letter counting, English scoring
-  labs/             Topics with their own page layout
+  dsa/              Sorting and searching: the algorithms, their page and the bar view
+  topics.tsx        The one list of every topic, used by the sidebar and the address bar
+  labs/             Cryptography topics with their own page layout
     numberTheory.ts Primes, modular inverse, fast powers, RSA and Diffie-Hellman
     sha256.ts       SHA-256, recording every round
     RsaLab.tsx, DiffieHellmanLab.tsx, HashLab.tsx
