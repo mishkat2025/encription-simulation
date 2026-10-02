@@ -81,7 +81,7 @@ export function AttackPanel({ cipher, currentCiphertext, onStepThrough }: Props)
               onClick={() => setKind(attack)}
               className={cx(
                 'h-9 rounded-lg border px-3 text-sm font-medium transition-colors',
-                kind === attack ? 'border-ink bg-ink text-page' : 'border-line-strong bg-surface text-ink hover:bg-sunken',
+                kind === attack ? 'border-accent bg-accent text-on-accent' : 'border-line-strong bg-surface text-ink hover:bg-sunken',
               )}
             >
               {ATTACK_NAMES[attack]}

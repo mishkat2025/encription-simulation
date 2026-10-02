@@ -1,23 +1,29 @@
-# CipherLab
+# CS² for Everyone
 
-An interactive web app that shows how classical ciphers work, one step at a time. Type a message, pick a cipher and a key, and watch each letter being encrypted or decrypted. Then switch sides and break the cipher the way an attacker would.
+**C**omputer **S**cience **C**oncept **S**imulation for everyone: an interactive web app that shows how computer science concepts work, one step at a time. The first area is cryptography. Type a message, pick an algorithm and a key, and watch each step happen. Then switch sides and break it the way an attacker would.
 
-It runs entirely in the browser. There is no backend: every cipher is plain TypeScript logic.
+It runs entirely in the browser. There is no backend: every algorithm is plain TypeScript logic.
 
 ## What it covers
 
-The ciphers follow a university lecture on traditional symmetric-key ciphers (Forouzan, chapter 3).
+The classical ciphers follow a university lecture on traditional symmetric-key ciphers (Forouzan, chapter 3).
 
-| Family | Ciphers |
+| Family | Topics |
 |---|---|
 | Monoalphabetic substitution | Additive (Caesar/shift), multiplicative, affine, substitution table |
 | Polyalphabetic substitution | Autokey, Playfair, Vigenère |
 | Transposition | Rail fence, columnar, keyed (permutation key) |
+| Public-key cryptography | RSA, Diffie-Hellman key exchange |
+| Hash functions | SHA-256 |
 
 Attacks:
 
 - **Brute force** on the additive, multiplicative and affine ciphers: every key is tried and the most English-looking result is marked.
 - **Statistical attack** on the additive and substitution ciphers: a letter-frequency chart of the ciphertext next to typical English.
+- **Factoring** a small RSA modulus by trial division to rebuild the private key.
+- **Discrete logarithm by trial** on a small Diffie-Hellman exchange to recover the shared key.
+
+The modern algorithms show their working: the extended Euclidean algorithm and square-and-multiply for RSA and Diffie-Hellman, and for SHA-256 the padding, all 64 rounds, and the avalanche effect between two messages. SHA-256 is implemented from scratch and checked against the official test vectors.
 
 Other features: play, pause and step controls, keyboard shortcuts (arrow keys and space), the lecture's worked examples as one-click presets, light and dark themes, and a layout that works on phones.
 
@@ -55,14 +61,22 @@ src/
     ciphers.test.ts Tests against the lecture examples
   attacks/
     attacks.ts      Brute force, letter counting, English scoring
+  labs/             Topics with their own page layout
+    numberTheory.ts Primes, modular inverse, fast powers, RSA and Diffie-Hellman
+    sha256.ts       SHA-256, recording every round
+    RsaLab.tsx, DiffieHellmanLab.tsx, HashLab.tsx
+    index.ts        The list of labs
+    labs.test.ts
   hooks/
     usePlayer.ts    Keeps track of the current step and the play timer
   components/
     views/          One visual for each kind of cipher (see below)
+    CipherPage.tsx  The page shared by all classical ciphers
     AttackPanel.tsx The "Break it" tab
+    StepTimeline.tsx, MathTables.tsx
     FrequencyChart.tsx
     PlayerControls.tsx, KeyInputs.tsx, Sidebar.tsx, ui.tsx, Icons.tsx
-  App.tsx           The page: holds the state and puts the pieces together
+  App.tsx           The frame: header, sidebar, and which topic to show
   index.css         Colours for light and dark mode
 ```
 
@@ -91,10 +105,11 @@ Each trace says which view draws it:
 
 ### How data flows through React
 
-1. `App.tsx` holds the state: which cipher, the message, the key, and encrypt or decrypt.
-2. When any of those change, `App` calls `cipher.run(...)` to get a new trace.
-3. The `usePlayer` hook holds one number, `step`: how many steps have been shown.
-4. `App` passes `trace` and `step` down to the view, which draws the picture for that step.
+1. `App.tsx` reads the topic from the address bar (`#vigenere`, `#rsa`) and shows its page.
+2. `CipherPage.tsx` holds the state for a cipher: the message, the key, and encrypt or decrypt.
+3. When any of those change, it calls `cipher.run(...)` to get a new trace.
+4. The `usePlayer` hook holds one number, `step`: how many steps have been shown.
+5. The page passes `trace` and `step` down to the view, which draws the picture for that step.
 
 Pressing play only changes `step`. React redraws the view each time it does.
 
@@ -105,6 +120,10 @@ Pressing play only changes `step`. React redraws the view each time it does.
 3. Add its worked examples to `ciphers.test.ts`.
 
 If it fits one of the four existing views, there is nothing else to do: it appears in the sidebar with a working step-through.
+
+### Adding a topic that is not a letter-by-letter cipher
+
+RSA, Diffie-Hellman and SHA-256 do not fit the cipher mould, so each is a "lab": a component with its own layout, listed in `src/labs/index.ts`. A lab keeps the same split as the ciphers: the logic lives in a plain `.ts` file that returns its working, and the component only draws it.
 
 ## Deploying for free
 
@@ -118,7 +137,8 @@ The build output is a folder of static files, so any static host works.
 
 - Conventions follow the lecture: plaintext is lowercase, ciphertext is uppercase, and everything except the letters a to z is dropped.
 - The lecture's Example 3.13 prints a ciphertext that is one letter short (it skips the last "e" of "message"). The app gives the full 45-letter answer.
-- These ciphers are for learning. All of them can be broken, and none should protect real data.
+- RSA and Diffie-Hellman use small numbers (moduli below one million) so every step fits on a page and stays exact in JavaScript numbers.
+- Everything here is for learning. The classical ciphers can all be broken, the modern ones are shown at toy sizes, and none of it should protect real data.
 
 ## Built with
 

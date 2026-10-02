@@ -62,3 +62,22 @@ export function usePlayer(total: number, resetKey: unknown) {
 }
 
 export type Player = ReturnType<typeof usePlayer>;
+
+/** Keyboard shortcuts for a player: arrow keys to step, space to play or pause. */
+export function usePlayerKeys(player: Player, enabled = true) {
+  useEffect(() => {
+    if (!enabled) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      // Leave the keys alone while the user is typing or using a control.
+      if ((event.target as HTMLElement).closest('input, textarea, select, button, summary')) return;
+      if (event.key === 'ArrowRight') player.next();
+      else if (event.key === 'ArrowLeft') player.previous();
+      else if (event.key === ' ') {
+        event.preventDefault();
+        player.toggle();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  });
+}

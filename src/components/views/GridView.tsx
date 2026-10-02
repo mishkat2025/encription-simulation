@@ -89,7 +89,7 @@ function PhaseCard({ number, active, caption }: { number: number; active: boolea
       <span
         className={cx(
           'flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold',
-          active ? 'bg-ink text-page' : 'border border-line-strong',
+          active ? 'bg-accent text-on-accent' : 'border border-line-strong',
         )}
       >
         {number}

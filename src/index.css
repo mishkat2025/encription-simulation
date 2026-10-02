@@ -4,19 +4,25 @@
   Colour roles. Every colour in the app comes from one of these variables, so
   light and dark mode are swapped in one place.
 
+  The page colours come from one palette: ghost white #fafaff, lavender
+  #e4d9ff, indigo #273469, navy #1e2749 and gunmetal #30343f (the base of the
+  secondary text colour).
+
   plain  = plaintext (blue)     cipher = ciphertext (orange)     key = key (green)
-  The three were checked for colour-blind separation in both modes.
+  The three were checked for colour-blind separation on both surfaces.
 */
 :root {
   color-scheme: light;
-  --page: #f9f9f7;
-  --surface: #fcfcfb;
-  --sunken: #f1f0ec;
-  --ink: #0b0b0b;
-  --ink-2: #52514e;
-  --muted: #74726c;
-  --line: #e1e0d9;
-  --line-strong: #c3c2b7;
+  --page: #fafaff;
+  --surface: #ffffff;
+  --sunken: #f1edff;
+  --ink: #1e2749;
+  --ink-2: #4f5466;
+  --muted: #646980;
+  --line: #e4d9ff;
+  --line-strong: #b3a6de;
+  --accent: #273469;
+  --on-accent: #fafaff;
   --plain: #2a78d6;
   --cipher: #eb6834;
   --key: #1baf7a;
@@ -26,14 +32,16 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     color-scheme: dark;
-    --page: #0d0d0d;
-    --surface: #1a1a19;
-    --sunken: #131312;
-    --ink: #ffffff;
-    --ink-2: #c3c2b7;
-    --muted: #96948d;
-    --line: #2c2c2a;
-    --line-strong: #454541;
+    --page: #1e2749;
+    --surface: #273469;
+    --sunken: #1e2749;
+    --ink: #fafaff;
+    --ink-2: #d5cdf0;
+    --muted: #a6abd0;
+    --line: #3a4884;
+    --line-strong: #5564a6;
+    --accent: #e4d9ff;
+    --on-accent: #1e2749;
     --plain: #3987e5;
     --cipher: #d95926;
     --key: #199e70;
@@ -43,14 +51,16 @@
 
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --page: #0d0d0d;
-  --surface: #1a1a19;
-  --sunken: #131312;
-  --ink: #ffffff;
-  --ink-2: #c3c2b7;
-  --muted: #96948d;
-  --line: #2c2c2a;
-  --line-strong: #454541;
+  --page: #1e2749;
+  --surface: #273469;
+  --sunken: #1e2749;
+  --ink: #fafaff;
+  --ink-2: #d5cdf0;
+  --muted: #a6abd0;
+  --line: #3a4884;
+  --line-strong: #5564a6;
+  --accent: #e4d9ff;
+  --on-accent: #1e2749;
   --plain: #3987e5;
   --cipher: #d95926;
   --key: #199e70;
@@ -67,6 +77,8 @@
   --color-muted: var(--muted);
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
   --color-plain: var(--plain);
   --color-cipher: var(--cipher);
   --color-key: var(--key);

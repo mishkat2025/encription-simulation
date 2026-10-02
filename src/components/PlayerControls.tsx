@@ -2,7 +2,7 @@ import type { Player } from '../hooks/usePlayer';
 import { EndIcon, NextIcon, PauseIcon, PlayIcon, PrevIcon, RestartIcon } from './Icons';
 import { Button } from './ui';
 
-const SPEEDS = [0.5, 1, 2, 4];
+const SPEEDS = [0.5, 1, 2, 4, 8];
 
 /** Play, pause, step and scrub through the steps. */
 export function PlayerControls({ player }: { player: Player }) {
@@ -38,7 +38,7 @@ export function PlayerControls({ player }: { player: Player }) {
         value={step}
         disabled={empty}
         onChange={(event) => player.goTo(Number(event.target.value))}
-        className="h-9 min-w-32 flex-1 accent-(--ink)"
+        className="h-9 min-w-32 flex-1 accent-(--accent)"
       />
 
       <span className="w-24 text-sm text-ink-2 tabular-nums">
